@@ -1,0 +1,38 @@
+{
+    "name": "edit-distance",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "keywords": [],
+    "scripts": {
+        "start": "nodemon src/server.ts",
+        "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
+        "build": "npx tsc",
+        "lint": "eslint . --ext .ts",
+        "format": "prettier --config .prettierrc **/*.* --write"
+    },
+    "author": "Ahmed Abdelaziz",
+    "license": "ISC",
+    "dependencies": {
+        "@typescript-eslint/eslint-plugin": "^8.29.0",
+        "@typescript-eslint/parser": "^8.29.0",
+        "dotenv": "^16.4.7",
+        "pg": "^8.14.1"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.24.0",
+        "@types/node": "^17.0.45",
+        "@types/pg": "^8.11.11",
+        "db-migrate": "^0.11.14",
+        "db-migrate-pg": "^1.5.2",
+        "eslint": "^9.24.0",
+        "eslint-config-prettier": "^8.10.0",
+        "eslint-plugin-prettier": "^4.2.1",
+        "globals": "^16.0.0",
+        "nodemon": "^2.0.22",
+        "ts-node": "^8.10.2",
+        "tsc-watch": "^5.0.3",
+        "typescript": "^4.9.5",
+        "typescript-eslint": "^8.29.0"
+    }
+}

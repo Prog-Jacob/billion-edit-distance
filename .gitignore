@@ -1,0 +1,9 @@
+# Python
+__pycache__/
+.ruff_cache/
+data/
+
+# TypeScript
+**/node_modules
+**/dist
+.env
