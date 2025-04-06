@@ -2,11 +2,11 @@
     "name": "edit-distance",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "server.ts",
     "keywords": [],
     "scripts": {
-        "start": "nodemon src/server.ts",
-        "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
+        "start": "nodemon server.ts",
+        "watch": "tsc-watch --esModuleInterop server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
         "build": "npx tsc",
         "lint": "eslint . --ext .ts",
         "format": "prettier --config .prettierrc **/*.* --write"
@@ -16,6 +16,7 @@
     "dependencies": {
         "@typescript-eslint/eslint-plugin": "^8.29.0",
         "@typescript-eslint/parser": "^8.29.0",
+        "csv-parser": "^3.2.0",
         "dotenv": "^16.4.7",
         "pg": "^8.14.1"
     },

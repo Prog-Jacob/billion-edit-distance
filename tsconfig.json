@@ -10,6 +10,6 @@
         "noImplicitAny": true,
         "skipLibCheck": true
     },
-    "include": ["database.ts"],
+    "include": ["**/*.ts"],
     "exclude": ["dist"]
 }
