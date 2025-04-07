@@ -17,23 +17,29 @@ def dl_distance(*args, **kwargs):
     return 10000 - dam_lev(*args, **kwargs)
 
 
-def scorer():
+def scorer(i=1, label=False):
     insert_costs = np.ones(128, dtype=np.float64) * 2.0
     delete_costs = np.ones(128, dtype=np.float64) * 2.0
     transpose_costs = np.ones((128, 128), dtype=np.float64) * 2.5
     substitute_costs = np.ones((128, 128), dtype=np.float64) * 3.0
 
-    return {
-        "scorer": dl_distance,
-        "scorer_kwargs": {
-            "insert_costs": insert_costs,
-            "delete_costs": delete_costs,
-            "transpose_costs": transpose_costs,
-            "substitute_costs": substitute_costs,
+    return [
+        {
+            "scorer": dl_distance,
+            "scorer_kwargs": {
+                "insert_costs": insert_costs,
+                "delete_costs": delete_costs,
+                "transpose_costs": transpose_costs,
+                "substitute_costs": substitute_costs,
+            },
+            **({"scorer_label": "damerau_levenshtein"} if label else {}),
         },
-        "scorer": distance,
-        "scorer_kwargs": {"weights": (2, 2, 3)},
-    }
+        {
+            "scorer": distance,
+            "scorer_kwargs": {"weights": (2, 2, 3)},
+            **({"scorer_label": "weighted_levenshtein"} if label else {}),
+        },
+    ][i]
 
 
 def get_match(query, candidates):
@@ -41,10 +47,11 @@ def get_match(query, candidates):
 
 
 def get_dataset(path="data/tcc_ceds_music.csv"):
+    label = scorer(label=True)["scorer_label"]
     try:
+        eval = load_csv(f"data/{label}.csv")
         train = load_csv("data/train.csv")
-        test = load_csv("data/test.csv")
-        return train, test
+        return train, eval
     except FileNotFoundError:
         print("Dataset not found. Creating dataset...")
         return _create_dataset(path)
@@ -71,12 +78,14 @@ def _create_dataset(path):
         song[DIST_KEY] = match[1]
         return song
 
-    test = Parallel(n_jobs=11)(delayed(process)(song) for song in test)
+    eval = Parallel(n_jobs=11)(delayed(process)(song) for song in test)
 
+    label = scorer(label=True)["scorer_label"]
+    save_csv("data/test.csv", test, fieldnames=[TITLE_KEY])
     save_csv("data/train.csv", train, fieldnames=[TITLE_KEY])
-    save_csv("data/test.csv", test, fieldnames=list(test[0].keys()))
+    save_csv(f"data/{label}.csv", eval, fieldnames=list(eval[0].keys()))
 
-    return train, test
+    return train, eval
 
 
 def _download_dataset():
